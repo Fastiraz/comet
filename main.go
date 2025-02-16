@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"log"
+	"os"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/bubbles/list"
+	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/Fastiraz/conventional-commits-maker/menu-type"
-	"github.com/Fastiraz/conventional-commits-maker/input"
 	"github.com/Fastiraz/conventional-commits-maker/breaking-change"
+	"github.com/Fastiraz/conventional-commits-maker/input"
+	"github.com/Fastiraz/conventional-commits-maker/menu-type"
+	"github.com/Fastiraz/conventional-commits-maker/textarea"
 )
 
 func main() {
@@ -62,4 +63,10 @@ func main() {
 
 	isBreaking := breakchange.IsBreakingChange()
 	fmt.Printf("Is breaking change: %v\n", isBreaking)
+
+	body := textarea.TextArea("body")
+	fmt.Printf("Body content: %s\n", body)
+
+	footer := textarea.TextArea("footer")
+	fmt.Printf("Footer content: %s\n", footer)
 }
