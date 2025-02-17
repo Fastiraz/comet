@@ -40,14 +40,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	if finalModel, ok := result.(menu.Model); ok && finalModel.ItemChosen {
-		fmt.Printf(
-			"You selected: %s - %s\n",
-			finalModel.Selected.TitleStr,
-			finalModel.Selected.Desc,
-		)
-	} else {
+	// if finalModel, ok := result.(menu.Model); ok && // finalModel.ItemChosen {
+	// 	fmt.Printf(
+	// 		"You selected: %s - %s\n",
+	// 		finalModel.Selected.TitleStr,
+	// 		finalModel.Selected.Desc,
+	// 	)
+	// } else {
+	// 	fmt.Println("No item selected.")
+	// }
+	finalModel, ok := result.(menu.Model)
+	if !ok || !finalModel.ItemChosen {
 		fmt.Println("No item selected.")
+		return
 	}
 
 	commitScope := scope.ScopeInput()
@@ -64,9 +69,64 @@ func main() {
 	isBreaking := breakchange.IsBreakingChange()
 	fmt.Printf("Is breaking change: %v\n", isBreaking)
 
+	message := scope.ScopeInput()
+	if err != nil {
+		fmt.Println("Error running program:", err)
+		log.Fatal(err)
+		os.Exit(1)
+	}
+	fmt.Printf(
+		"Your commit message: %s\n",
+		message,
+	)
+
 	body := textarea.TextArea("body")
 	fmt.Printf("Body content: %s\n", body)
 
 	footer := textarea.TextArea("footer")
 	fmt.Printf("Footer content: %s\n", footer)
+
+	command := BuildCommand(
+		finalModel.Selected.TitleStr,
+		commitScope,
+		isBreaking,
+		message,
+		body,
+		footer,
+	)
+
+	fmt.Printf("\n\nGit command: %s\n", command)
+}
+
+func BuildCommand(
+	commitType string,
+	scope string,
+	isBreaking bool,
+	message string,
+	body string,
+	footer string) string {
+
+	command := commitType
+
+	if scope != "" {
+		command = fmt.Sprintf("%s(%s)", command, scope)
+	}
+
+	if isBreaking {
+		command = fmt.Sprintf("%s!: ", command)
+	} else {
+		command = fmt.Sprintf("%s: ", command)
+	}
+
+	command = fmt.Sprintf("%s%s", command, message)
+
+	if body != "" {
+		command = fmt.Sprintf("%s\n\n%s", command, body)
+	}
+
+	if footer != "" {
+		command = fmt.Sprintf("%s\n\n%s", command, footer)
+	}
+
+	return command
 }
