@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"runtime"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -106,7 +108,7 @@ func BuildCommand(
 	body string,
 	footer string) string {
 
-	command := commitType
+	command := fmt.Sprintf("git commit -m \"%s", commitType)
 
 	if scope != "" {
 		command = fmt.Sprintf("%s(%s)", command, scope)
@@ -128,5 +130,40 @@ func BuildCommand(
 		command = fmt.Sprintf("%s\n\n%s", command, footer)
 	}
 
+	command = fmt.Sprintf("%s\"", command)
+	err := CopyToClipboard(command)
+	if err != nil {
+		fmt.Println("Failed to copy:", err)
+	} else {
+		fmt.Println("Text copied to clipboard:", command)
+	}
+
 	return command
+}
+
+func CopyToClipboard(text string) error {
+	var cmd *exec.Cmd
+
+	switch runtime.GOOS {
+	case "darwin":
+		cmd = exec.Command("pbcopy")
+	case "linux":
+		cmd = exec.Command("xclip", "-selection", "clipboard")
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "clip")
+	default:
+		return fmt.Errorf("unsupported platform")
+	}
+
+	stdin, err := cmd.StdinPipe()
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		defer stdin.Close()
+		_, _ = stdin.Write([]byte(text))
+	}()
+
+	return cmd.Run()
 }
