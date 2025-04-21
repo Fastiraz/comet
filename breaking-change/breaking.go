@@ -17,12 +17,12 @@ func IsBreakingChange() bool {
 	accessible, _ := strconv.ParseBool(os.Getenv("ACCESSIBLE"))
 
 	form := huh.NewForm(
-		huh.NewGroup(huh.NewNote().
-			Title("Breaking Change").
-			Description("You are about to choose if your commit contains breaking changes.\n\nA breaking change commit is a commit that introduces a breaking change.\n\nIf so, choose `yes` else `no`?\n\n").
-			Next(true).
-			NextLabel("Next"),
-		),
+		// huh.NewGroup(huh.NewNote().
+		// 	Title("Breaking Change").
+		// 	Description("You are about to choose if your commit contains breaking changes.\n\nA breaking change commit is a commit that introduces a breaking change.\n\nIf so, choose `yes` else `no`?\n\n").
+		// 	Next(true).
+		// 	NextLabel("Next"),
+		// ),
 
 		huh.NewGroup(
 			huh.NewSelect[string]().

@@ -39,8 +39,10 @@ func initialModel(mode string) model {
 	} else {
 		ti.Placeholder = "Write something..."
 	}
-	ti.ShowLineNumbers = true
-	ti.Focus()
+
+ti.ShowLineNumbers = true
+
+ti.Focus()
 
 	return model{
 		textarea: ti,
@@ -90,8 +92,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	return fmt.Sprintf(
-		"Tell me a story.\n\n%s\n\n%s",
+		"%s\n\n%s\n\n%s",
+		commitMessage(m.textarea.Placeholder),
 		m.textarea.View(),
 		"(enter to submit, alt+enter for new line, ctrl+c to quit)",
 	) + "\n\n"
+}
+
+func commitMessage(placeholder string) string {
+	if placeholder == "Tell me the body of the commit..." {
+		return "Body commit"
+	} else if placeholder == "Tell me the footer of the commit..." {
+		return "Footer commit"
+	}
+	return "Write something..."
 }

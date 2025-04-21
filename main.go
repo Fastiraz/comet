@@ -14,6 +14,8 @@ import (
 	"github.com/Fastiraz/conventional-commits-maker/input"
 	"github.com/Fastiraz/conventional-commits-maker/menu-type"
 	"github.com/Fastiraz/conventional-commits-maker/textarea"
+	// "github.com/charmbracelet/glow"
+	"github.com/charmbracelet/glamour"
 )
 
 func main() {
@@ -57,54 +59,50 @@ func main() {
 		return
 	}
 
-	commitScope := scope.ScopeInput()
+	commitScope := scope.Input("scope")
 	if err != nil {
 		fmt.Println("Error running program:", err)
 		log.Fatal(err)
 		os.Exit(1)
 	}
-	fmt.Printf(
-		"You select scope: %s\n",
-		commitScope,
-	)
 
 	isBreaking := breakchange.IsBreakingChange()
-	fmt.Printf("Is breaking change: %v\n", isBreaking)
 
-	message := scope.ScopeInput()
+	subject := scope.Input("subject")
 	if err != nil {
 		fmt.Println("Error running program:", err)
 		log.Fatal(err)
 		os.Exit(1)
 	}
-	fmt.Printf(
-		"Your commit message: %s\n",
-		message,
-	)
 
 	body := textarea.TextArea("body")
-	fmt.Printf("Body content: %s\n", body)
-
 	footer := textarea.TextArea("footer")
-	fmt.Printf("Footer content: %s\n", footer)
 
 	command := BuildCommand(
 		finalModel.Selected.TitleStr,
 		commitScope,
 		isBreaking,
-		message,
+		subject,
 		body,
 		footer,
 	)
 
-	fmt.Printf("\n\nGit command: %s\n", command)
+	// fmt.Printf("\n\nGit command: \n\n```bash\n%s\n```\n", command)
+	in := fmt.Sprintf("\n\nGit command: \n\n```bash\n%s\n```\n", command)
+
+	out, err := glamour.Render(in, "dark")
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Print(out)
+	}
 }
 
 func BuildCommand(
 	commitType string,
 	scope string,
 	isBreaking bool,
-	message string,
+	subject string,
 	body string,
 	footer string) string {
 
@@ -120,7 +118,7 @@ func BuildCommand(
 		command = fmt.Sprintf("%s: ", command)
 	}
 
-	command = fmt.Sprintf("%s%s", command, message)
+	command = fmt.Sprintf("%s%s", command, subject)
 
 	if body != "" {
 		command = fmt.Sprintf("%s\n\n%s", command, body)
@@ -135,7 +133,7 @@ func BuildCommand(
 	if err != nil {
 		fmt.Println("Failed to copy:", err)
 	} else {
-		fmt.Println("Text copied to clipboard:", command)
+		fmt.Println("Git command copied to clipboard.")
 	}
 
 	return command

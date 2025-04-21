@@ -16,11 +16,16 @@ type model struct {
 	textInput textinput.Model
 	err       error
 	input     string
+	mode      string
 }
 
-func initialModel() model {
+func initialModel(mode string) model {
 	ti := textinput.New()
-	ti.Placeholder = "Enter your scope"
+	if mode == "scope" {
+		ti.Placeholder = "Enter your scope"
+	} else if mode == "subject" {
+		ti.Placeholder = "Enter your subject"
+	}
 	ti.Focus()
 	ti.CharLimit = 156
 	ti.Width = 20
@@ -28,6 +33,7 @@ func initialModel() model {
 	return model{
 		textInput: ti,
 		err:       nil,
+		mode:      mode,
 	}
 }
 
@@ -58,15 +64,23 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
+	var message string
+	if m.mode == "scope" {
+		message = "What’s the commit scope? (let empty if none)"
+	} else if m.mode == "subject" {
+		message = "What’s the commit subject?"
+	}
+
 	return fmt.Sprintf(
-		"What’s the commit scope?\n\n%s\n\n%s",
+		"%s\n\n%s\n\n%s",
+		message,
 		m.textInput.View(),
 		"(esc to quit)",
 	) + "\n"
 }
 
-func ScopeInput() string {
-	p := tea.NewProgram(initialModel())
+func Input(mode string) string {
+	p := tea.NewProgram(initialModel(mode))
 	result, err := p.Run()
 	if err != nil {
 		log.Fatal(err)
