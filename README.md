@@ -17,8 +17,16 @@ Comet is a tool written in Golang that helps you make better commits following c
 ### Install Comet
 
 ```bash
-go install github.com/fastiraz/comet@latest
+go install github.com/Fastiraz/comet@latest
 ```
+
+> [!IMPORTANT]
+> If you cannot use `comet` after the installation, do not forget to add your go bin folder to your `PATH` to be able to run the installed binary.
+>
+> Add the following line to your `.<shell>rc` file.
+> ```bash
+> export PATH="$HOME/go/bin:$PATH"
+> ```
 
 ### Build from source
 
