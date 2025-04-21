@@ -80,7 +80,10 @@ func (m model) View() string {
 }
 
 func Input(mode string) string {
-	p := tea.NewProgram(initialModel(mode))
+	p := tea.NewProgram(
+		initialModel(mode),
+		tea.WithAltScreen(),
+	)
 	result, err := p.Run()
 	if err != nil {
 		log.Fatal(err)

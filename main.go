@@ -14,7 +14,6 @@ import (
 	"github.com/Fastiraz/conventional-commits-maker/input"
 	"github.com/Fastiraz/conventional-commits-maker/menu-type"
 	"github.com/Fastiraz/conventional-commits-maker/textarea"
-	// "github.com/charmbracelet/glow"
 	"github.com/charmbracelet/glamour"
 )
 
@@ -87,7 +86,6 @@ func main() {
 		footer,
 	)
 
-	// fmt.Printf("\n\nGit command: \n\n```bash\n%s\n```\n", command)
 	in := fmt.Sprintf("\n\nGit command: \n\n```bash\n%s\n```\n", command)
 
 	out, err := glamour.Render(in, "dark")

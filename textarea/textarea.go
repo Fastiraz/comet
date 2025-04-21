@@ -9,7 +9,10 @@ import (
 )
 
 func TextArea(mode string) string {
-	p := tea.NewProgram(initialModel(mode))
+	p := tea.NewProgram(
+		initialModel(mode),
+		tea.WithAltScreen(),
+	)
 
 	result, err := p.Run()
 	if err != nil {
