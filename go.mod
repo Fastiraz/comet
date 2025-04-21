@@ -1,4 +1,4 @@
-module github.com/Fastiraz/conventional-commits-maker
+module github.com/Fastiraz/comet
 
 go 1.24.0
 

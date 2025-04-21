@@ -6,14 +6,12 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
-
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
-
-	"github.com/Fastiraz/conventional-commits-maker/breaking-change"
-	"github.com/Fastiraz/conventional-commits-maker/input"
-	"github.com/Fastiraz/conventional-commits-maker/menu-type"
-	"github.com/Fastiraz/conventional-commits-maker/textarea"
+	"github.com/Fastiraz/comet/breaking-change"
+	"github.com/Fastiraz/comet/input"
+	"github.com/Fastiraz/comet/menu-type"
+	"github.com/Fastiraz/comet/textarea"
 	"github.com/charmbracelet/glamour"
 )
 
